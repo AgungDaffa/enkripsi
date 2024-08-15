@@ -8,8 +8,10 @@ class RSA
     private $privateKey;
     private $modulus;
 
-    public function __construct($p, $q)
+    public function __construct($bitLength = 16)
     {
+        list($p, $q) = $this->generatePrimeNumbers($bitLength);
+
         $this->modulus = $p * $q;
         $phi = ($p - 1) * ($q - 1);
 
@@ -27,26 +29,91 @@ class RSA
         return $a;
     }
 
-    private function findPublicKey($phi)
+    private function generatePrimeNumbers($bitLength)
     {
-        $e = 2;
-        while ($e < $phi) {
-            if ($this->gcd($e, $phi) == 1) {
-                return $e;
-            }
-            $e++;
-        }
-        return null;
+        do {
+            $p = $this->generateRandomPrime($bitLength);
+            $q = $this->generateRandomPrime($bitLength);
+        } while ($p === $q);
+
+        return [$p, $q];
     }
 
-    private function findPrivateKey($e, $phi)
+    private function generateRandomPrime($bitLength)
     {
-        $d = 1;
-        while (($e * $d) % $phi != 1) {
-            $d++;
-        }
-        return $d;
+        do {
+            $num = $this->generateRandomNumber($bitLength);
+        } while (!$this->isPrime($num));
+
+        return $num;
     }
+
+    private function generateRandomNumber($bitLength)
+    {
+        return rand(2**($bitLength-1), 2**$bitLength - 1);
+    }
+
+    private function isPrime($num)
+    {
+        if ($num < 2) {
+            return false;
+        }
+        for ($i = 2, $sqrt = sqrt($num); $i <= $sqrt; $i++) {
+            if ($num % $i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // before
+    // private function findPublicKey($phi)
+    // {
+    //     $e = 2;
+    //     while ($e < $phi) {
+    //         if ($this->gcd($e, $phi) == 1) {
+    //             return $e;
+    //         }
+    //         $e++;
+    //     }
+    //     return null;
+    // }
+
+    private function findPublicKey($phi)
+{
+    do {
+        // Pilih bilangan acak antara 1 hingga 100
+        $e = rand(1, 1000);
+    } while ($this->gcd($e, $phi) != 1);  // Ulangi sampai e relatif prima terhadap phi
+
+    return $e;
+}
+
+
+    private function extendedGcd($a, $b)
+{
+    if ($b == 0) {
+        return [$a, 1, 0];
+    }
+
+    list($gcd, $x1, $y1) = $this->extendedGcd($b, $a % $b);
+    $x = $y1;
+    $y = $x1 - floor($a / $b) * $y1;
+
+    return [$gcd, $x, $y];
+}
+
+    private function findPrivateKey($e, $phi)
+{
+    list($g, $x) = $this->extendedGcd($e, $phi);
+
+    if ($g != 1) {
+        throw new \Exception('No modular inverse found.');
+    }
+
+    // Menghasilkan nilai positif untuk kunci privat
+    return ($x % $phi + $phi) % $phi;
+}
 
     public function encrypt($message)
     {
@@ -83,4 +150,3 @@ class RSA
         return $this->modulus;
     }
 }
-
