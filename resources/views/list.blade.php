@@ -20,8 +20,8 @@
                 <th>Encrypted Name</th>
                 <th>File Path</th>
                 <th>Uploaded At</th>
-                <!-- <th>Public Key</th>
-                <th>Private Key</th> -->
+                <th>Public Key</th>
+                <th>Private Key</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,8 +33,8 @@
                 <td>{{ $upload->encrypted_name }}</td>
                 <td>{{ $upload->file_path }}</td>
                 <td>{{ $upload->created_at }}</td>
-                {{-- <!-- <td>{{ $upload-> public_key}}</td>
-                <td>{{ $upload-> private_key}}</td> --> --}}
+                <td>{{ $upload-> public_key}}</td>
+                <td>{{ $upload-> private_key}}</td>
                 <td>
                     <a href="{{ route('file.decrypt', $upload->id) }}" class="btn btn-primary btn-sm">Download Decrypted</a>
                 </td>
