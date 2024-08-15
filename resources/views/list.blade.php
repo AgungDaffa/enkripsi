@@ -36,7 +36,7 @@
                 {{-- <!-- <td>{{ $upload-> public_key}}</td>
                 <td>{{ $upload-> private_key}}</td> --> --}}
                 <td>
-                    <a href="{{ route('file.decrypt', $upload->id) }}" class="btn btn-primary btn-sm">Download</a>
+                    <a href="{{ route('file.decrypt', $upload->id) }}" class="btn btn-primary btn-sm">Download Decrypted</a>
                 </td>
             </tr>
             @endforeach
