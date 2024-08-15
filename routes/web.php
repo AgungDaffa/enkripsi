@@ -21,3 +21,4 @@ Route::post('/upload', [FileUploadController::class, 'upload']);
 Route::get('/decrypt/{fileName}', [FileUploadController::class, 'decryptFileName']);
 Route::get('/list', [FileUploadController::class, 'listUploads'])->name('uploads.list');
 Route::get('/file/decrypt/{id}', [FileUploadController::class, 'decryptFile'])->name('file.decrypt');
+Route::get('/file/download-encryption/{id}', [FileUploadController::class, 'downloadEncryptedFile'])->name('file.download.encryption');

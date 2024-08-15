@@ -23,6 +23,7 @@
                 <th>Public Key</th>
                 <th>Private Key</th>
                 <th>Actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,9 @@
                 <td>{{ $upload->created_at }}</td>
                 <td>{{ $upload-> public_key}}</td>
                 <td>{{ $upload-> private_key}}</td>
+                <td>
+                    <a href="{{ route('file.download.encryption', $upload->id) }}" class="btn btn-primary btn-sm">Download Encryption</a>
+                </td>
                 <td>
                     <a href="{{ route('file.decrypt', $upload->id) }}" class="btn btn-primary btn-sm">Download Decrypted</a>
                 </td>

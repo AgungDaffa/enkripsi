@@ -77,4 +77,21 @@ class FileUploadController extends Controller
             echo $decryptedContent;
         }, $upload->original_name);
     }
+
+    public function downloadEncryptedFile($id)
+    {
+    // Retrieve the file information from the database based on the ID
+    $upload = Upload::findOrFail($id);
+
+    // Get the path to the encrypted file from the database
+    $encryptedFilePath = storage_path('app/' . $upload->file_path);
+
+    // Check if the file exists
+    if (!file_exists($encryptedFilePath)) {
+        return redirect()->route('uploads.list')->with('error', 'Encrypted file not found.');
+    }
+
+    // Provide the encrypted file for download
+    return response()->download($encryptedFilePath, $upload->encrypted_name);
+    }   
 }
