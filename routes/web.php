@@ -7,7 +7,7 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::post('/upload', [FileUploadController::class, 'upload']);
+Route::post('/upload', [FileUploadController::class, 'upload'])->name('upload');
 
 Route::get('/decrypt/{fileName}', [FileUploadController::class, 'decryptFileName']);
 
