@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'List of Uploaded Files')
+@section('title', 'List of Decrypted Files')
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="mb-4">List of Uploaded Files</h1>
+    <h1 class="mb-4">List of Decrypted Files</h1>
 
     @if(session('success'))
     <div class="alert alert-success">
@@ -20,9 +20,7 @@
                 <th>Encrypted Name</th>
                 <th>File Path</th>
                 <th>Uploaded At</th>
-                <th>Public Key</th>
                 <th>Private Key</th>
-                <th>Actions</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,11 +32,7 @@
                 <td>{{ $upload->encrypted_name }}</td>
                 <td>{{ $upload->file_path }}</td>
                 <td>{{ $upload->created_at }}</td>
-                <td>{{ $upload-> public_key}}</td>
-                <td>{{ $upload-> private_key}}</td>
-                <td>
-                    <a href="{{ route('file.download.encryption', $upload->id) }}" class="btn btn-primary btn-sm">Download Encryption</a>
-                </td>
+                <td>{{ $upload->private_key }}</td>
                 <td>
                     <a href="{{ route('file.decrypt', $upload->id) }}" class="btn btn-primary btn-sm">Download Decrypted</a>
                 </td>

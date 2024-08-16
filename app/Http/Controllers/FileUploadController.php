@@ -52,7 +52,8 @@ class FileUploadController extends Controller
         $upload->save();
 
         // Redirect ke halaman list uploads
-        return redirect()->route('uploads.list')->with('success', 'File uploaded and encrypted successfully!');
+        return redirect()->route('uploads.encryption')->with('success', 'File uploaded and encrypted successfully!');
+
     }
 
     public function decryptFile($id)
@@ -80,18 +81,32 @@ class FileUploadController extends Controller
 
     public function downloadEncryptedFile($id)
     {
-    // Retrieve the file information from the database based on the ID
-    $upload = Upload::findOrFail($id);
+        // Ambil informasi file dari database berdasarkan ID
+        $upload = Upload::findOrFail($id);
 
-    // Get the path to the encrypted file from the database
-    $encryptedFilePath = storage_path('app/' . $upload->file_path);
+        // Ambil path file terenkripsi dari database
+        $encryptedFilePath = storage_path('app/' . $upload->file_path);
 
-    // Check if the file exists
-    if (!file_exists($encryptedFilePath)) {
-        return redirect()->route('uploads.list')->with('error', 'Encrypted file not found.');
+        // Periksa apakah file ada
+        if (!file_exists($encryptedFilePath)) {
+            return redirect()->route('uploads.list')->with('error', 'Encrypted file not found.');
+        }
+
+        // Unduh file terenkripsi
+        return response()->download($encryptedFilePath, $upload->encrypted_name);
     }
 
-    // Provide the encrypted file for download
-    return response()->download($encryptedFilePath, $upload->encrypted_name);
-    }   
+    // Menampilkan daftar file terenkripsi
+    public function showEncryptionList()
+    {
+        $uploads = Upload::all(); // Sesuaikan query jika hanya ingin mengambil file terenkripsi
+        return view('encryption_list', compact('uploads'));
+    }
+
+    // Menampilkan daftar file yang sudah didekripsi
+    public function showDecryptionList()
+    {
+        $uploads = Upload::all(); // Sesuaikan query jika hanya ingin mengambil file yang sudah didekripsi
+        return view('decryption_list', compact('uploads'));
+    }
 }
